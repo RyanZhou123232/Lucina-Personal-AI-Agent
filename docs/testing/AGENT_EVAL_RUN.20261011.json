@@ -1,0 +1,454 @@
+{
+  "suiteVersion": "v1",
+  "runId": "20261011-live-baseline",
+  "date": "2026-10-11",
+  "codeVersion": "evidence-v5 with planner format repair; no Git revision available",
+  "model": null,
+  "groundingModel": null,
+  "promptVersion": null,
+  "testDataVersion": "v1 seed supplied by user; approval details not inspected",
+  "observations": [
+    {
+      "caseId": "T01",
+      "step": "lookup",
+      "input": "Mira 现在在哪家公司工作？",
+      "reply": "根据已有记录，Mira 目前在 Cedar 任工程师 [M1][M2]。记录中没有提到其他公司信息。",
+      "proposals": [],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": false,
+      "irrelevantExpansion": false,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "User screenshot: expected Cedar/company and engineer role, normal saved-conversation notice, Sources 1 collapsed. Original source support and internal candidate/verifier not inspected. No new Review items reported by notice; no direct database inspection."
+    },
+    {
+      "caseId": "T02",
+      "step": "lookup",
+      "input": "Mira 的生日是哪一天？",
+      "reply": "没有找到直接支持这个问题的确切记录。以下是相关线索：Mira 目前在 Cedar 任工程师 [M1]。关于她的生日，现有记录中没有相关信息，无法确认具体日期。",
+      "proposals": [],
+      "sourceQuotes": [
+        {
+          "messageId": null,
+          "quote": "Mira 目前在 Cedar 任工程师，喜欢吃面条。Niko 目前在 Harbor 任设计师，喜欢吃米饭。58 目前在 Maple 实习。"
+        }
+      ],
+      "verification": null,
+      "correct": true,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": false,
+      "irrelevantExpansion": true,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Screenshot confirms no birthday fabricated; company/role is unnecessary expansion. Source preview contains seed facts, original message ID and full retrieval/verifier not inspected. Input inferred from the requested T02, not visible in screenshot."
+    },
+    {
+      "caseId": "T03",
+      "step": "intervening-aside",
+      "input": "顺便说一句，今天咖啡店特别吵",
+      "reply": "关于 Mira：检索到的记忆里没有她的公司或生日信息，所以这两点我无法确认（未找到确切证据）。你最新说的“今天和 Mira 聊了，她最近开始学陶艺”是一条新事实，我已准备提案供你审核；另外“今天咖啡店特别吵”只是环境描述，不涉及人物信息，暂不保存。",
+      "proposals": null,
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": false,
+      "contentCorrect": false,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": null,
+      "unnecessaryClarification": false,
+      "duplicateProposal": null,
+      "irrelevantExpansion": true,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Screenshot shows Review 0 and two proposals withheld for original-ID/quote validation, contradicting reply claim of ready proposals. Exact source errors and proposal payloads unavailable; repeated extraction suspected but not confirmed. Company/ birthday discussion irrelevant; no claim that database company data was lost. Initial pottery approval not independently observed. Final pronoun step and recall remain untested."
+    },
+    {
+      "caseId": "T03",
+      "step": "pronoun-followup",
+      "input": "她还说自己周末喜欢做杯子",
+      "reply": "Mira 目前在 Cedar 任工程师 [M3]。她的生日在现有记录中没有信息，无法确认 [M1]。另外，她最近开始学陶艺 [M2]，并说自己周末喜欢做杯子 [1d7b5659-fc40-4577-8ab2-99ded60cc4a5]。",
+      "proposals": null,
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": null,
+      "irrelevantExpansion": true,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Screenshot reply resolves she to Mira and notice reports one Review item. Proposal identity/payload/sources not displayed; approval and recall untested. Raw UUID rendered as inline citation for latest fact, unlike M-label citations; record as citation presentation/validation concern, no code change during baseline."
+    },
+    {
+      "caseId": "T03",
+      "step": "recall",
+      "input": "Mira 周末喜欢做什么？",
+      "reply": "Mira 周末喜欢做杯子（陶艺相关）[M3]。她最近开始学陶艺，周末喜欢做杯子。",
+      "proposals": [],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": false,
+      "irrelevantExpansion": false,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Expected factual answer shown, with redundant repeated clause. Sources 1 collapsed; provenance not inspected. User reports accidentally approving previous item, but committed payload not observed. Recall can use raw messages and is not proof of attribute persistence. Earlier T03 aside failure remains, so overall T03 not fully passed."
+    },
+    {
+      "caseId": "T04",
+      "step": "subject-switch-proposal",
+      "input": "他周末喜欢练民谣",
+      "reply": "Mira 目前在 Cedar 任工程师 [M3]。她的生日记录里没有，无法确认。另外，Niko 最近开始学吉他 [M2]，他周末喜欢练民谣 [e7a238cb-1e49-487d-b164-78a66c459e3c]。",
+      "proposals": [
+        {
+          "changeType": "update_person",
+          "payload": {
+            "name": "Niko",
+            "fields": {},
+            "attributes": {
+              "weekend": "周末喜欢练民谣"
+            }
+          }
+        }
+      ],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": null,
+      "irrelevantExpansion": true,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Visible Review proposal correctly names Niko and stores folk practice in weekend attribute, core fields empty. Provenance/source quotes not visible and approval not yet confirmed. Reply includes irrelevant Mira company/birthday discussion and raw UUID citation. Earlier T04 steps inferred from test sequence rather than observed."
+    },
+    {
+      "caseId": "T05",
+      "step": "ambiguous-plan",
+      "input": "有人说他下个月要去 Spruce 工作",
+      "reply": "Mira 目前在 Cedar 任工程师 [M3]。她的生日没有记录，未找到相关证据。",
+      "proposals": null,
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": false,
+      "contentCorrect": false,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": null,
+      "unsupportedClaim": null,
+      "falseRefusal": null,
+      "unnecessaryClarification": false,
+      "duplicateProposal": null,
+      "irrelevantExpansion": true,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Expected subject clarification absent; reply ignores latest Spruce plan. Review 0 with one proposal withheld for type/fields/confidence, exact failed proposal unavailable. No evidence of incorrect published employment attribution or successful ambiguity handling. Prior screenshot shows meal item approved/committed, underlying payload not inspected. Next volunteered identity confirmation is recovery testing, not proof system asked correctly."
+    },
+    {
+      "caseId": "T05",
+      "step": "volunteered-confirmation",
+      "input": "是 Niko。",
+      "reply": "Mira 目前在 Cedar 任工程师 [M4]。关于她的生日，现有记录中没有相关信息，无法确认。另外，你确认了“下个月要去 Spruce 工作”的人是 Niko [d729975b-ce21-4d56-b71d-56192f7aa168]。这是一项未来计划，我会把它作为待确认的备注保留，不会改动 Niko 当前的 Harbor 设计师身份。",
+      "proposals": [
+        {
+          "changeType": "update_person",
+          "name": "Niko",
+          "fields": {},
+          "attributeKeys": [
+            "future_plan",
+            "unresolved_time"
+          ]
+        }
+      ],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": null,
+      "irrelevantExpansion": true,
+      "latencyMs": null,
+      "modelRequestCount": null,
+      "notes": "Visible proposal names Niko, fields empty, future_plan and unresolved_time visible but value text cropped at right. Sources and complete payload not inspected; approval unconfirmed. Correct reply-level attribution and future/current distinction. Retains irrelevant Mira company/birthday and UUID citation. Volunteered confirmation after missing clarification; not overall T05 pass."
+    },
+    {
+      "caseId": "T06",
+      "step": "future-plan-recall",
+      "input": "Niko 下个月有什么工作计划？",
+      "reply": "没有找到直接支持这个问题的确切记录。以下是相关线索：记录里没有 Niko 下个月的具体工作计划，只提到一个尚未确认的说法：他下个月要去 Spruce 工作（未生效，时间仅记为“下个月”）。除此之外没有更详细的安排。[M1][M3][M2]",
+      "correct": null,
+      "contentCorrect": true,
+      "sourceQuotes": null,
+      "verification": null,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": false,
+      "notes": "Plan retrieved despite excessive no-exact-plan framing. Sources collapsed, saved future-plan payload not inspected. T06 setup reused T05 approved plan instead of the canonical explicit Niko/Harbor setup; protocol deviation must remain visible."
+    },
+    {
+      "caseId": "T06",
+      "step": "current-versus-future",
+      "input": "Niko 已经在 Spruce 工作了吗？",
+      "reply": "根据记录：Niko 目前仍在 Harbor 任设计师 [M5]。关于下个月，有一条尚未确认的说法——有人说他下个月要去 Spruce 工作，且你确认了「他」指 Niko [M2][M3]，但这条信息标注为未确认、未生效，具体日期也未确定（仅记为「下个月」）。所以：他还没有在 Spruce 工作，当前公司仍是 Harbor。",
+      "correct": null,
+      "contentCorrect": null,
+      "sourceQuotes": null,
+      "verification": null,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": false,
+      "notes": "Preserves current Harbor versus future Spruce. Categorical has not joined is stronger than cannot confirm he has joined; flag overconfidence for later review. Sources collapsed and complete evidence unavailable."
+    },
+    {
+      "caseId": "T06",
+      "step": "other-person-exclusion",
+      "input": "Mira 也要去 Spruce 吗？",
+      "reply": "关于 Niko 下个月的工作计划：目前只有一条未确认的说法——「有人说他下个月要去 Spruce 工作」[M2]，你随后确认这个「他」指的是 Niko [M8]。所以这只是一个传闻/计划，并非已确认的入职，也没有具体日期。Niko 是否已经在 Spruce 工作：没有证据表明他已经入职。现有记录显示他目前在 Harbor 任设计师 [M6]，Spruce 只是下个月的说法，属于未来计划，不能替代当前公司。Mira 是否也要去 Spruce：没有找到任何相关证据，无法确认。",
+      "correct": null,
+      "contentCorrect": true,
+      "sourceQuotes": null,
+      "verification": null,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": true,
+      "notes": "Follow-up screenshots confirm actual Mira query and final Mira sentence correctly says no evidence. No cross-person plan transfer. Extensive repetition of previous Niko answers is irrelevant expansion. Sources collapsed; original evidence not inspected, full correct score remains null."
+    },
+    {
+      "caseId": "T07",
+      "step": "current-company",
+      "input": "Mira 现在在哪家公司？",
+      "reply": "Mira 现在在 Willow 任工程师 [M6]。她已离开 Cedar [M6]。",
+      "correct": true,
+      "contentCorrect": true,
+      "sourceQuotes": [
+        {
+          "messageId": null,
+          "quote": "更新一下：Mira 已经离开 Cedar，现在在 Willow 任工程师"
+        }
+      ],
+      "verification": null,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": false,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": false,
+      "notes": "Correction/approval payload not inspected; answer correctness is not direct proof of structured attribute preservation or single-person row count."
+    },
+    {
+      "caseId": "T07",
+      "step": "historical-company",
+      "input": "Mira 之前在哪家公司？",
+      "reply": "Mira 现在在 Willow 任工程师 [M6]。她之前（离开前）在 Cedar 任工程师 [M5]。",
+      "correct": true,
+      "contentCorrect": true,
+      "sourceQuotes": [
+        {
+          "messageId": null,
+          "quote": "Mira 目前在 Cedar 任工程师，喜欢吃面条。Niko 目前在 Harbor 任设计师，喜欢吃米饭。58 目前在 Maple 实习。"
+        }
+      ],
+      "verification": null,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": false,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": false,
+      "notes": "Visible initial source supports historical Cedar; preceding screenshot shows correction source supporting current Willow. Correction/approval payload not inspected; answer correctness is not direct proof of structured attribute preservation or single-person row count."
+    },
+    {
+      "caseId": "T07",
+      "step": "preserved-preference-recall",
+      "input": "Mira 喜欢吃什么？",
+      "reply": "我找到了相关记录，但这次回答的事实或引用没有通过校验，暂时无法可靠作答。",
+      "correct": false,
+      "contentCorrect": false,
+      "sourceQuotes": null,
+      "verification": null,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": null,
+      "unsupportedClaim": null,
+      "falseRefusal": true,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": false,
+      "notes": "System fails to answer known initial noodles fact, explicitly due to final factual/citation checking. Exact candidate, retrieved evidence and verifier reason unknown. Do not infer preference was erased from database or that examiner rejection was necessarily wrong."
+    },
+    {
+      "caseId": "T08",
+      "step": "cancellation-proposal",
+      "input": "Niko 曾计划去 Spruce，但已经取消了。他仍在 Harbor 工作",
+      "reply": "已记录：Niko 去 Spruce 的计划已取消，他仍在 Harbor 工作。",
+      "proposals": [
+        {
+          "changeType": "update_person",
+          "payload": {
+            "mode": "correct",
+            "name": "Niko",
+            "fields": {},
+            "attributes": {
+              "future_plan": "曾计划去 Spruce，但已取消",
+              "unresolved_time": null
+            }
+          }
+        }
+      ],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "finalWrongPerson": false,
+      "falseRefusal": false,
+      "irrelevantExpansion": false,
+      "notes": "Visible proposal corrects future_plan and leaves core fields empty. Sources not inspected; screenshot precedes approval."
+    },
+    {
+      "caseId": "T08",
+      "step": "cancellation-recall",
+      "input": "Niko 还计划去 Spruce 吗？",
+      "reply": "根据记录，Niko 曾计划去 Spruce，但该计划已经取消；他目前仍在 Harbor 工作 [M1]。所以他现在不再计划去 Spruce。",
+      "proposals": [],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "finalWrongPerson": false,
+      "falseRefusal": false,
+      "irrelevantExpansion": false,
+      "notes": "Correct cancellation recall with citation; Sources collapsed. No direct observation of commit payload or confirmation of new conversation ID."
+    },
+    {
+      "caseId": "T09",
+      "step": "numeric-nickname-recall",
+      "input": "58 喜欢什么？",
+      "reply": "58 喜欢画水彩 [M1][M2]。",
+      "proposals": [],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "duplicateProposal": false,
+      "irrelevantExpansion": false,
+      "notes": "Screenshot names numeric person 58, returns watercolor, Review 0. Sources collapsed; initial proposal and commit not inspected. Prior watercolor acknowledgment visible above, so cross-conversation protocol not independently confirmed; do not label as proven cross-conversation recall."
+    },
+    {
+      "caseId": "T10",
+      "step": "explicit-name-lookup",
+      "input": "Mira 在哪家公司工作？",
+      "reply": "Mira 目前在 Willow 任工程师 [M7]。此前她在 Cedar 任工程师 [M6]，后来已离开 Cedar 转到 Willow [M7]。",
+      "proposals": [],
+      "sourceQuotes": null,
+      "verification": null,
+      "correct": null,
+      "contentCorrect": true,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": null,
+      "falseRefusal": false,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": false,
+      "notes": "Current Willow correctly reflects earlier T07; expected answer intentionally adapted from canonical independent seed Cedar because live test account accumulated prior cases. Sources collapsed."
+    },
+    {
+      "caseId": "T10",
+      "step": "followup-preference",
+      "input": "她喜欢吃什么？",
+      "reply": "Mira 目前在 Willow 任工程师（此前在 Cedar，已离开）[M1][M9]。关于她喜欢吃什么：记录里没有她当前饮食偏好的信息——旧记录曾提到她“喜欢吃面条”，但后来该字段已被“陶艺（最近开始学）”取代，所以现在没有确切的饮食偏好记录。",
+      "proposals": [],
+      "sourceQuotes": null,
+      "verification": {
+        "reason": "All factual clauses are supported: M9 states Mira left Cedar and now works at Willow as engineer; M1's field_history shows attributes.likes changed from 面条 to 陶艺, so the reply correctly says the old food preference was replaced and no current dietary preference is recorded.",
+        "version": "evidence-v5",
+        "replySupported": true,
+        "citationSupport": [
+          {
+            "kind": "message",
+            "quote": "更新一下：Mira 已经离开 Cedar，现在在 Willow 任工程师",
+            "messageId": "b660aad5-c08f-4cc1-8480-2d1b489e3627",
+            "citationId": "M9",
+            "subjectName": "Mira"
+          },
+          {
+            "kind": "message",
+            "quote": "我今天和 Mira 聊了，她最近开始学陶艺。",
+            "messageId": "75db02e5-f66f-4265-8449-53965a7cb77f",
+            "citationId": "M1",
+            "subjectName": "Mira"
+          }
+        ],
+        "rejectedProposals": 0,
+        "rawCitationSupport": [
+          {
+            "kind": "message",
+            "quote": "更新一下：Mira 已经离开 Cedar，现在在 Willow 任工程师",
+            "message_id": "b660aad5-c08f-4cc1-8480-2d1b489e3627",
+            "citation_id": "M9",
+            "subject_name": "Mira"
+          },
+          {
+            "kind": "message",
+            "quote": "我今天和 Mira 聊了，她最近开始学陶艺。",
+            "message_id": "75db02e5-f66f-4265-8449-53965a7cb77f",
+            "citation_id": "M1",
+            "subject_name": "Mira"
+          }
+        ]
+      },
+      "correct": false,
+      "contentCorrect": false,
+      "initialCandidateWrongPerson": null,
+      "finalWrongPerson": false,
+      "unsupportedClaim": true,
+      "falseRefusal": true,
+      "unnecessaryClarification": false,
+      "irrelevantExpansion": true,
+      "notes": "Full diagnostic confirms actual attributes.likes overwrite: noodles to pottery. Original food source was retrieved and survives. Examiner accepted the mistaken inference that storage overwrite revoked food preference. Pronoun resolution succeeded; answer failed. This v5 baseline remains failed after v6 code changes; no v6 live run yet."
+    }
+  ],
+  "runStatus": "First screenshot-led walkthrough complete; partial evidence checks and protocol deviations remain. No aggregate pass rate established."
+}

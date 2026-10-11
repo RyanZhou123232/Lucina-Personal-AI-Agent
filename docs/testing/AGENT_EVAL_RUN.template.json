@@ -1,0 +1,32 @@
+{
+  "suiteVersion": "v1",
+  "runId": null,
+  "date": null,
+  "codeVersion": null,
+  "model": null,
+  "groundingModel": null,
+  "promptVersion": null,
+  "testDataVersion": null,
+  "observations": [],
+  "observationTemplate": {
+    "caseId": "T01",
+    "step": null,
+    "input": null,
+    "reply": null,
+    "proposals": null,
+    "sourceQuotes": null,
+    "verification": null,
+    "approvedProposalIds": [],
+    "correct": null,
+    "initialCandidateWrongPerson": null,
+    "finalWrongPerson": null,
+    "unsupportedClaim": null,
+    "falseRefusal": null,
+    "unnecessaryClarification": null,
+    "duplicateProposal": null,
+    "irrelevantExpansion": null,
+    "latencyMs": null,
+    "modelRequestCount": null,
+    "notes": null
+  }
+}

@@ -1,0 +1,142 @@
+html, body { width: 100%; height: 100%; overflow: hidden; }
+.stage { min-height: 100dvh; height: 100dvh; padding: 0; }
+.stage.isAppReady .scatterLayer,
+.stage.isAppReady .sortControl,
+.stage.isAppReady .filterControl,
+.stage.isAppReady .quickActions,
+.stage.isAppReady .addConnectionPanel,
+.stage.isAppReady .debugPanel,
+.stage.isAppReady .settingsScrim,
+.stage.isAppReady .settingsPanel,
+.stage.isAppReady .myProfileToggle,
+.stage.isAppReady .myProfileCard,
+.stage.isAppReady .searchBar { display: none !important; }
+.personalWorkspace { position: absolute; z-index: 20; inset: 24px 3.2vw 18px; display: none; flex-direction: column; gap: 17px; color: rgba(255,255,255,.92); font-family: Arial,Helvetica,sans-serif; pointer-events: none; }
+.stage.isAppReady .personalWorkspace { display: flex; pointer-events: auto; }
+.personalHeader { display: flex; align-items: center; justify-content: space-between; flex: 0 0 auto; min-height: 88px; gap: 24px; }
+.personalKicker { margin: 0; color: rgba(255,255,255,.55); font: 700 10px/1.4 Arial,Helvetica,sans-serif; letter-spacing: .17em; }
+.personalHeader h1 { margin: 12px 0 7px; color: rgba(255,255,255,.96); font-size: clamp(27px,3vw,42px); font-weight: 500; letter-spacing: -.045em; line-height: 1.1; }
+.personalSubtitle { margin: 0; color: rgba(255,255,255,.62); font-size: 14px; }
+.personalHeaderActions { display: flex; align-items: center; gap: 18px; }
+.personalSession { display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,.72); font: 10px Consolas,'Courier New',monospace; letter-spacing: .12em; white-space: nowrap; }
+.personalSession i, .personalCanvasFooter i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #c2dcae; box-shadow: 0 0 10px rgba(194,220,174,.55); }
+.personalSignOut { padding: 9px 14px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; color: rgba(255,255,255,.82); background: rgba(255,255,255,.07); font: 10px Consolas,'Courier New',monospace; letter-spacing: .06em; }
+.personalSignOut:hover { background: rgba(255,255,255,.15); }
+.personalWorkArea { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(290px,.72fr); gap: 18px; flex: 1 1 auto; min-height: 0; }
+.glassPanel { position: relative; min-width: 0; border: 1px solid rgba(255,255,255,.17); border-radius: 25px; background: rgba(24,18,17,.46); box-shadow: 0 28px 74px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.1); backdrop-filter: blur(27px) saturate(135%); -webkit-backdrop-filter: blur(27px) saturate(135%); }
+.personalConversation { display: flex; flex-direction: column; min-height: 0; padding: 22px 26px 16px; }
+.personalConversationTop, .personalCanvasTop { display: flex; align-items: center; justify-content: space-between; color: rgba(255,255,255,.48); font: 9px Consolas,'Courier New',monospace; letter-spacing: .16em; }
+.personalConversationTop span:last-child { color: rgba(213,228,205,.72); letter-spacing: .1em; }
+.personalMessages { display: flex; flex: 1 1 auto; flex-direction: column; gap: 21px; min-height: 170px; padding: 34px 4px 20px; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.2) transparent; }
+.personalMessage { display: flex; align-items: flex-start; gap: 12px; max-width: 88%; animation: personalFadeUp .25s ease both; }
+.personalMessage.userMessage { align-self: flex-end; max-width: min(78%,680px); }
+.personalAvatar { flex: 0 0 38px; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.5); border-radius: 13px; color: #fff; background: rgba(255,255,255,.1); font-size: 22px; }
+.personalMessageBody { min-width: 0; }
+.personalMessageMeta { display: block; margin: 3px 0 8px; color: rgba(255,255,255,.45); font: 9px Consolas,'Courier New',monospace; letter-spacing: .12em; }
+.personalMessageMeta i { margin-left: 10px; font-style: normal; }
+.personalMessageBody p { margin: 0; color: rgba(255,255,255,.86); font-size: clamp(14px,1.3vw,18px); line-height: 1.62; white-space: pre-wrap; overflow-wrap: anywhere; }
+.userMessage .personalMessageBody { padding: 13px 17px; border: 1px solid rgba(255,255,255,.2); border-radius: 18px 5px 18px 18px; background: rgba(255,255,255,.12); }
+.userMessage .personalMessageMeta { text-align: right; }
+.personalComposerWrap { flex: 0 0 auto; }
+.personalNotice { display: flex; align-items: center; justify-content: space-between; min-height: 40px; margin: 0 0 9px; padding: 10px 14px; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; color: rgba(242,223,204,.82); background: rgba(255,255,255,.08); font-size: 12px; line-height: 1.45; }
+.personalNotice.isError { color: #ffd1c9; background: rgba(117,40,35,.42); }
+.personalComposer { padding: 14px 15px 11px; border: 1px solid rgba(255,255,255,.27); border-radius: 20px; background: rgba(255,255,255,.085); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); }
+.personalComposer textarea { display: block; width: 100%; min-height: 54px; max-height: 160px; resize: vertical; border: 0; outline: 0; color: rgba(255,255,255,.94); background: transparent; font: 15px/1.55 Arial,Helvetica,sans-serif; }
+.personalComposer textarea::placeholder { color: rgba(255,255,255,.46); }
+.personalComposerBottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.personalComposerBottom>span { color: rgba(255,255,255,.42); font: 9px Consolas,'Courier New',monospace; letter-spacing: .08em; }
+.personalComposerBottom>span i { padding: 0 4px; font-style: normal; }
+.personalComposerBottom button { min-width: 105px; padding: 11px 14px 11px 17px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: #251b18; background: rgba(245,242,232,.94); font-weight: 700; }
+.personalComposerBottom button b { padding-left: 10px; color: #785541; }
+.personalComposerBottom button:disabled { opacity: .6; cursor: wait; }
+.personalPrivacy { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 11px 0 0; color: rgba(255,255,255,.38); font: 9px Consolas,'Courier New',monospace; letter-spacing: .04em; }
+.personalPrivacy span { font-size: 14px; }
+.personalCanvas { display: flex; flex-direction: column; min-height: 0; padding: 22px 23px 17px; overflow: hidden; }
+.personalCanvasMore { color: rgba(255,255,255,.46); font: 19px Consolas,'Courier New',monospace; }
+.personalTabs { display: flex; gap: 22px; margin-top: 18px; border-bottom: 1px solid rgba(255,255,255,.13); }
+.personalTabs button { position: relative; padding: 0 0 12px; border: 0; color: rgba(255,255,255,.5); background: none; font-size: 12px; }
+.personalTabs button.isActive { color: rgba(255,255,255,.94); }
+.personalTabs button.isActive::after { position: absolute; right: 0; bottom: -1px; left: 0; height: 2px; border-radius: 2px; background: #f0d4c0; content: ""; }
+.personalTabs b { margin-left: 4px; padding: 2px 5px; border-radius: 10px; background: rgba(255,255,255,.13); font: 9px Consolas,'Courier New',monospace; }
+.personalCanvasContent { flex: 1 1 auto; padding: 22px 6px 40px; text-align: center; overflow: auto; }
+.personalOrbit { position: relative; display: grid; place-items: center; width: 144px; height: 106px; margin: 2px auto 15px; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; transform: rotate(-18deg); }
+.personalOrbit::before { position: absolute; inset: 14px 18px; border: 1px solid rgba(255,255,255,.12); border-radius: 50%; content: ""; transform: rotate(42deg); }
+.personalOrbit b { display: grid; place-items: center; width: 43px; height: 43px; border: 1px solid rgba(255,255,255,.32); border-radius: 15px; background: rgba(255,255,255,.12); font-size: 22px; font-weight: 400; transform: rotate(18deg); }
+.personalOrbit i { position: absolute; top: 12px; right: 21px; width: 8px; height: 8px; border: 2px solid rgba(255,255,255,.7); border-radius: 50%; background: #c39478; }
+.personalCanvasContent h2 { margin: 11px auto; color: rgba(255,255,255,.88); font-size: 23px; font-weight: 500; letter-spacing: -.03em; }
+.personalCanvasContent>p:not(.personalKicker):not(.personalEmptyReview) { max-width: 275px; margin: 0 auto; color: rgba(255,255,255,.55); font-size: 12px; line-height: 1.75; }
+.personalSource { display: flex; align-items: center; gap: 11px; margin-top: 25px; padding: 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 13px; text-align: left; background: rgba(255,255,255,.055); }
+.personalSource>span { color: #d4ad93; font-size: 23px; }
+.personalSource p { margin: 0; color: rgba(255,255,255,.55); font-size: 10px; line-height: 1.7; }
+.personalSource b { color: rgba(255,255,255,.82); font-weight: 600; }
+.personalCanvasFooter { position: absolute; right: 23px; bottom: 17px; left: 23px; display: flex; justify-content: space-between; color: rgba(255,255,255,.42); font: 8px Consolas,'Courier New',monospace; letter-spacing: .1em; }
+.personalCanvasFooter span:first-child { display: inline-flex; align-items: center; gap: 7px; }
+.personalCanvasFooter i { width: 5px; height: 5px; }
+.personalReviewContent { text-align: left; }
+.personalReviewContent h2 { margin: 12px 0 4px; }
+.personalEmptyReview { margin-top: 30px; color: rgba(255,255,255,.56); font-size: 12px; line-height: 1.6; text-align: center; }
+.personalReviewCard { margin-top: 15px; padding: 13px; border: 1px solid rgba(255,255,255,.15); border-radius: 14px; background: rgba(255,255,255,.06); }
+.personalReviewCard pre { max-height: 180px; overflow: auto; padding: 10px; border-radius: 9px; color: rgba(255,255,255,.75); background: rgba(0,0,0,.18); font: 10px/1.6 Consolas,'Courier New',monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.personalReviewError { color: #ffd4c7; font-size: 11px; line-height: 1.5; overflow-wrap: anywhere; }
+.personalReviewActions { display: flex; justify-content: flex-end; gap: 8px; }
+.personalReviewActions button { padding: 8px 11px; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; color: rgba(255,255,255,.82); background: rgba(255,255,255,.08); font-size: 10px; }
+.personalReviewActions button:last-child { color: #251b18; background: rgba(245,242,232,.9); }
+.personalReviewActions button:disabled { opacity: .55; }
+.personalFooter { display: flex; justify-content: space-between; flex: 0 0 auto; color: rgba(255,255,255,.45); font: 8px Consolas,'Courier New',monospace; letter-spacing: .12em; }
+.personalFooter b { padding: 0 5px; color: rgba(255,255,255,.76); font-weight: 400; }
+.personalWorkspace [hidden] { display: none !important; }
+@keyframes personalFadeUp { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 850px) {
+  .personalWorkspace { inset: 15px 14px 12px; overflow: auto; }
+  .personalHeader { min-height: 80px; }
+  .personalHeaderActions { gap: 9px; }
+  .personalSession { font-size: 8px; }
+  .personalSignOut { padding: 8px 10px; font-size: 9px; }
+  .personalWorkArea { grid-template-columns: minmax(0,1fr); flex: initial; }
+  .personalConversation { min-height: min(63dvh,600px); padding: 17px 17px 13px; }
+  .personalCanvas { min-height: 380px; }
+  .personalFooter { margin-top: auto; padding-top: 10px; font-size: 7px; }
+}
+@media (prefers-reduced-motion: reduce) { .personalMessage { animation: none; } }
+
+.personalReviewEditor { display: grid; gap: 12px; margin-top: 12px; }
+.personalReviewEditor label { display: grid; gap: 6px; min-width: 0; }
+.personalReviewEditor label>span { color: rgba(255,255,255,.75); font-size: 12px; text-transform: capitalize; }
+.personalReviewEditor textarea { width: 100%; min-height: 50px; resize: vertical; padding: 10px; border: 1px solid rgba(255,255,255,.23); border-radius: 9px; color: rgba(255,255,255,.94); background: rgba(0,0,0,.18); font: 13px/1.5 Arial,Helvetica,sans-serif; user-select: text; }
+.personalReviewEditor textarea:focus-visible { outline: 2px solid rgba(240,212,192,.8); outline-offset: 2px; }
+.personalReviewEditor input[type=checkbox] { justify-self: start; }
+.personalEditHint { margin: 0; color: rgba(255,255,255,.65); font-size: 11px; line-height: 1.5; }
+.personalReviewActions { flex-wrap: wrap; }
+
+.personalTaskContent { text-align: left; }
+.personalTaskContent h2 { margin: 12px 0 16px; }
+.personalTaskToolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; color: rgba(255,255,255,.72); }
+.personalTaskToolbar button { padding: 7px 11px; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; color: rgba(255,255,255,.82); background: rgba(255,255,255,.08); font-size: 11px; }
+.personalTaskToolbar button:disabled { opacity: .55; }
+.personalCompletedToggle { display: flex; align-items: center; gap: 8px; margin: 14px 0; color: rgba(255,255,255,.7); font-size: 12px; }
+.personalTaskNotice { margin: 12px 0; font-size: 12px; line-height: 1.5; color: rgba(224,237,213,.9); overflow-wrap: anywhere; }
+.personalTaskNotice.isError { color: #ffd4c7; }
+.personalTaskCard { padding: 14px 0; border-top: 1px solid rgba(255,255,255,.15); }
+.personalTaskCard h3 { margin: 0 0 8px; font-size: 15px; font-weight: 500; line-height: 1.5; overflow-wrap: anywhere; }
+.personalTaskCard p { margin: 0 0 12px; color: rgba(255,255,255,.7); font-size: 12px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.personalTaskCard .personalTaskMeta { font-size: 11px; color: rgba(255,255,255,.55); }
+.personalPeopleSection { margin-bottom: 26px; border-bottom: 1px solid rgba(255,255,255,.15); padding-bottom: 20px; }
+.personalPeopleSection>summary { margin-bottom: 15px; color: rgba(255,255,255,.88); cursor: pointer; font-size: 18px; }
+.personalPeopleSection input[type=search] { min-width: 0; width: 100%; padding: 9px; border: 1px solid rgba(255,255,255,.23); border-radius: 9px; color: #fff; background: rgba(0,0,0,.18); }
+.personalPeopleSection input::placeholder { color: rgba(255,255,255,.6); }
+.personalPeopleSection .personalTaskToolbar button { flex-shrink: 0; }
+.personalPeopleSection .personalTaskCard details { margin: 12px 0; color: rgba(255,255,255,.7); font-size: 12px; }
+.personalPeopleSection .personalTaskCard summary { cursor: pointer; margin-bottom: 10px; }
+.personalMemorySources { margin-top: 12px; color: rgba(255,255,255,.65); font-size: 11px; line-height: 1.6; }
+.personalMemorySources summary { cursor: pointer; }
+.personalMemorySources p { font-size: 12px; }
+.personalMemorySources blockquote { margin: 10px 0; padding: 8px 12px; border-left: 2px solid rgba(240,212,192,.5); white-space: pre-wrap; overflow-wrap: anywhere; }
+.personalMemorySources small { color: rgba(255,255,255,.45); }
+
+/* Conversation action uses the existing workspace visual style. */
+.personalConversationTop { flex-wrap: wrap; gap: 10px; }
+.personalConversationActions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+#personalNewConversation { padding: 7px 11px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; color: rgba(255,255,255,.86); background: rgba(255,255,255,.07); font: 11px Arial,Helvetica,sans-serif; letter-spacing: normal; cursor: pointer; }
+#personalNewConversation:hover { background: rgba(255,255,255,.15); }
+#personalNewConversation:focus-visible { outline: 2px solid rgba(255,255,255,.85); outline-offset: 3px; }
+#personalNewConversation:disabled { opacity: .45; cursor: default; }
