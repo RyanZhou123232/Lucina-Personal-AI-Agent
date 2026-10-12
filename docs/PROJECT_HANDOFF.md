@@ -6,6 +6,30 @@
 
 ## 1. 当前结论与停止点
 
+### 最新补充：本地 STT 第一版（2026-10-12）
+
+- 用户报告请求分类修复后的邮件流程没有问题，要求继续 STT。已明确录完转写、编辑确认后发送、服务端 API；中文混英文人名/公司/术语，现在几十秒，未来 2–5 分钟。用户 OpenAI 支付受阻，改选阿里云百炼 `qwen3-asr-flash`，弗吉尼亚地域。
+- 本地新增录音/停止/取消/失败重试和时间提示，最长 5 分钟。转写结果追加到当前输入框，保留已有输入和转写期间修改；不自动发送。录音/转写期间阻止发送和切换聊天；取消、退出登录、离开页面会停止麦克风并忽略迟到的结果。失败录音只在当前页面内存中保留，供显式重试。
+- 新增 `backend/lib/stt.ts`、`backend/routes/speech/transcribe/route.ts`，Next API 仅转发。登录验证、同源验证、类型/文件签名、流式读取大小上限（3 MiB）、客户端时长范围检查、单进程同 owner 并发保护及 90 秒提供者超时。真实音频时长仍依赖录音端和提供者限制；客户端时长 header 不证明实际音频长度。多实例全局限流尚未实现。
+- 采用 DashScope 原生同步接口，以 Base64 提交音频；不将录音公开发布，不读取个人历史作为识别词库，不在应用中持久化音频。混合语种不设置单一 language。浏览器当前支持 webm/ogg 录音（Chrome/Edge）；Safari/mobile 尚未验收。iframe 添加 microphone permission；视觉沿用现有设计。
+- 用户最初提供的 3042432 是 API key 编号，不是 Workspace ID；第一次虚构音频测试返回 BadRequest.IllegalEndpoint。随后用户提供完整 Base URL，确认业务空间为 ws-a8r6rdmj4x0pleoc。仅更新本机 STT_BASE_URL 为该域名的 /api/v1；保留原 key/model。正确地址下真实合成英文录音转写成功（49 字符），未保存用户消息或执行 Gmail/Calendar。
+- 151 项回归通过（包含 SQL，0 跳过），类型检查和生产构建通过。9 项新增检查覆盖安全 endpoint、输入限制、原生请求、错误/截断不重试、登录/来源，以及草稿保留、取消迟到结果、拒绝麦克风权限和 5 分钟自动停止。
+- 当前只完成本地实现及上述验证；用户真实中英混合录音、2–5 分钟录音、静音/噪声/网络故障和来源管道端到端仍需验收，不能据此宣称 STT 质量或整个 MVP1 完成。配置及测试步骤见 guides/STT.md。用户明确要求云端保持现状；未 push GitHub、未部署 Vercel、未执行 SQL 迁移。
+
+下方 STT 缺口及“文本入口”描述是此前阶段状态；以本补充为最新进度。
+
+### 最新补充：云端部署与邮件请求分类修复（2026-10-11）
+
+- 用户报告项目已推送 GitHub 并通过 Vercel 部署；线上配置 Supabase 公共变量并重新部署后登录成功。固定生产域名为 `https://personal-agent-eta-opal.vercel.app`。GitHub remote 本地读取为 `https://github.com/RyanZhou123232/Personal-Agent.git`；尚未独立核对云端代码版本和所有环境配置。
+- 用户线上请求“准备一封邮件草稿，先保存 Gmail、Review 批准后发送”，收到历史无证据回复且 Review 0。用户提供的 metadata 确认 `plan.intent=lookup`、`taskStatus=pending`、检索 types 为 tasks/messages；实际 evidence 非空。分类错误后旧 lookup 分支禁止所有提案，不是这轮 Gmail API 请求失败。更早的混合请求还出现回复声称草稿已准备而 Review 0；该轮完整诊断未取得。
+- 本地已将请求计划拆分为 `needs_memory` 与 `allow_proposals` 两个必填布尔量，分别映射为 `needsMemory`、`allowProposals`。新动作可不检索历史，混合请求可同时检索和生成提案，纯查询禁止新提案。`intent` 仅作为兼容诊断，由 proposal permission 派生；旧内存 fixture 的兼容 fallback 不用于接受缺少新字段的模型计划。
+- 生成、来源验证、有限修复和服务端 binding 分支根据 proposal permission 执行。固定无证据拒答仅用于只读历史请求；普通建议、缺信息的动作澄清不会被吞掉。增加语义检查要求：无对应提案不能声称草稿已准备／进入 Review。没有关键词强制动作，没有放松原文、owner、Review 或 Google 执行保护。
+- 142 项回归全部通过（含 SQL，0 跳过）、类型检查和生产构建通过。真实 DeepSeek 使用虚构数据验证四种分类，以及新邮件提案生成和独立检查，通过；未调用 Gmail 写入、未发送邮件、未写入 hosted 数据库。证据见 `testing/REQUEST_PLAN_VALIDATION.20261011.md`。
+- 修复目前只在本机源码。尚未提交／推送 GitHub，也未部署 Vercel；仅 Redeploy 旧源码不能上线修复。下一步把代码同步到 GitHub，部署后用正式域名检查 Review 提案和真实 Gmail 草稿；发送仍由用户明确批准。此次没有数据库迁移。
+- Chrome 在随机部署地址出现“在诈骗网站中输入密码”的警告；用户确认账号密码与 Google 密码不同，固定生产地址随后未出现相同提醒。Google Transparency Report 对随机地址没有数据显示。具体原因尚未确证，不能把没有警告当成安全审计或已完成修复。
+
+下文 134 项、最后目录整理等描述保留为此前阶段的记录，最新停止点以本补充为准。
+
 **本文件边界**：维护当前实现、验证证据、缺口、交接步骤和目录规则，不另行定义产品范围。产品目标看 PRD，任务拆分看 TDL，验收标准看 EVALUATION，数据设计看 SCHEMA / 实际迁移，开发方式看根 AGENTS。用户最新明确要求优先；最初 IMPLEMENTATION_PLAN 是历史方案参考。完整文件职责与冲突处理统一维护在 [README：文件边界](README.md#文件边界遇到问题该听哪份)，避免再复制一套权威说明。
 
 应用已具备文本对话、个人记录提取、来源校验、Review 编辑 / 批准 / 拒绝、内部提交、任务和人物基础管理、跨对话结构化与关键词检索，以及 Gmail / Google Calendar 集成。
@@ -237,6 +261,10 @@ archive 中 `prepare.mjs` 等是一次性补丁脚本，多数不幂等，**不�
 5. 完成 MVP1 验收报告后才宣称完成；不自动开始 MVP2。
 
 用户偏好：用中文，直接动手，持续到目标完成；解释清楚结果与下一步，避免频繁重复确认。保留原视觉，UI 面向非技术用户。技能 / 环境要求若确实阻塞才解释原因。密钥放本机，真实邮件发送与日程创建仍交给用户明确 Review 批准。
+
+2026-10-11 用户补充的长期协作偏好：这个项目同时是学习全局思维的契机。重要决策需解释目标与约束、有哪些合理候选方案、各自取舍，以及最终选择背后的逻辑。说明应简明、面向用户理解，不能只报告实施结果。此偏好已保存在项目交接中；不代表已写入账号级全局记忆。
+
+2026-10-11 最新部署进展（用户报告）：项目已推送 GitHub 并通过 Vercel 部署；因此上文“没有确认远端代码备份”是此前状态。尚未核对仓库 URL、生产域名、Vercel 环境变量与构建配置。用户截图显示线上登录出现 Supabase 配置错误；本地源码在缺少 `NEXT_PUBLIC_SUPABASE_URL` 或 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` 时返回空客户端，legacy UI 等待客户端超时后显示该错误。Google 回调地址此前为 localhost，迁移到生产需同步配置 Vercel 的 `GOOGLE_REDIRECT_URI` 与 Google OAuth 的 authorized redirect URI；未修改代码或云端配置。
 
 ### 可直接放进新 conversation 的接手提示
 

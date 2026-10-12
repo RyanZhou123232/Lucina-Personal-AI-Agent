@@ -69,14 +69,13 @@ Use speech-to-text for MVP1.
 Full realtime speech-to-speech is deferred.
 
 ## TDL-007 — STT Provider / Model
-**Status: P1 TBD**
+**Status: DECIDED for first local implementation (2026-10-12)**
 
-Need to choose:
-- provider/model
-- streaming vs chunked
-- transcript confidence behavior
-- interruption handling
-- mic capture implementation
+- Provider/model: Alibaba Cloud Model Studio, qwen3-asr-flash; Virginia native DashScope endpoint. Selected after the user's OpenAI payment difficulty; keys and workspace endpoints must match region.
+- Record first, then transcribe; not live speech streaming. Up to five minutes per recording, current Chrome/Edge browser capture.
+- Show editable transcription in the existing composer; only explicit Send persists a message. No automatic sending or downstream proposal execution.
+- Preserve typed drafts, allow cancellation and explicit retry; discard stale results after cancellation, signout or conversation changes. Audio is temporary in page memory, not persisted by the application.
+- Mixed Chinese/English uses automatic language recognition. User recording quality and long-recording acceptance remain unverified; see [STT guide](../guides/STT.md).
 
 ## TDL-008 — Write Pipeline
 **Status: DECIDED**

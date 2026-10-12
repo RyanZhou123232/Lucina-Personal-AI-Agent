@@ -21,8 +21,14 @@
   let conversationId = null;
   let saving = false;
   let switchingConversation = false;
+    form.dataset.composerBusy = String(saving);
   let conversationEpoch = 0;
   let editingReviewId = null;
+  const voiceBusy = () => form.dataset.voiceBusy === 'true';
+  window.addEventListener('personal-os:voice-state', () => {
+    sendButton.disabled = saving || switchingConversation || voiceBusy() || !draft.value.trim();
+    newConversationButton.disabled = saving || switchingConversation || voiceBusy();
+  });
 
   const showNotice = (message, isError = false) => {
     notice.textContent = message;
@@ -122,8 +128,9 @@
 
   const setLoading = (value) => {
     saving = value;
-    sendButton.disabled = value || switchingConversation || !draft.value.trim();
-    newConversationButton.disabled = value || switchingConversation;
+    form.dataset.composerBusy = String(value || switchingConversation);
+    sendButton.disabled = value || switchingConversation || voiceBusy() || !draft.value.trim();
+    newConversationButton.disabled = value || switchingConversation || voiceBusy();
     sendButton.textContent = value ? "Saving…" : "Send ↗";
   };
 
@@ -332,8 +339,10 @@
   };
 
   const loadConversation = async () => {
-    if (saving || switchingConversation) return;
+    if (saving || switchingConversation || voiceBusy()) return;
     switchingConversation = true;
+    form.dataset.composerBusy = "true";
+    window.dispatchEvent(new CustomEvent("personal-os:conversation-changing"));
     const epoch = ++conversationEpoch;
     newConversationButton.disabled = true;
     sendButton.disabled = true;
@@ -355,15 +364,18 @@
     } finally {
       if (epoch === conversationEpoch) {
         switchingConversation = false;
+    form.dataset.composerBusy = String(saving);
         newConversationButton.disabled = saving;
-        sendButton.disabled = saving || !draft.value.trim();
+        sendButton.disabled = saving || voiceBusy() || !draft.value.trim();
       }
     }
   };
 
   newConversationButton.addEventListener("click", async () => {
-    if (saving || switchingConversation) return;
+    if (saving || switchingConversation || voiceBusy()) return;
     switchingConversation = true;
+    form.dataset.composerBusy = "true";
+    window.dispatchEvent(new CustomEvent("personal-os:conversation-changing"));
     const epoch = ++conversationEpoch;
     const previousStatus = status.textContent;
     newConversationButton.disabled = true;
@@ -387,9 +399,10 @@
     } finally {
       if (epoch === conversationEpoch) {
         switchingConversation = false;
+    form.dataset.composerBusy = String(saving);
         newConversationButton.disabled = false;
         newConversationButton.textContent = "New conversation +";
-        sendButton.disabled = !draft.value.trim();
+        sendButton.disabled = voiceBusy() || !draft.value.trim();
       }
     }
   });
@@ -397,7 +410,7 @@
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const content = draft.value.trim();
-    if (!content || saving || switchingConversation) return;
+    if (!content || saving || switchingConversation || voiceBusy()) return;
     setLoading(true);
     showNotice("");
     try {
@@ -421,7 +434,7 @@
   });
 
   draft.addEventListener("input", () => {
-    if (!saving && !switchingConversation) sendButton.disabled = !draft.value.trim();
+    if (!saving && !switchingConversation) sendButton.disabled = voiceBusy() || !draft.value.trim();
   });
 
   document.getElementById("personalSignOut").addEventListener("click", () => {
@@ -444,6 +457,7 @@
   window.addEventListener("personal-os:signed-out", () => {
     conversationEpoch += 1;
     switchingConversation = false;
+    form.dataset.composerBusy = String(saving);
     newConversationButton.disabled = true;
     newConversationButton.textContent = "New conversation +";
     conversationId = null;

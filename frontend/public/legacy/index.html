@@ -6,6 +6,7 @@
     <title>Personal OS</title>
     <link rel="stylesheet" href="src/css/style.css" />
     <link rel="stylesheet" href="src/css/personal-os.css" />
+  <link rel="stylesheet" href="src/css/voice.css" />
   </head>
   <body>
     <main class="stage isIntro isAuthPending" aria-label="Scattered glass buttons">
@@ -101,6 +102,7 @@
               <p class="personalNotice" id="personalNotice" role="status" hidden></p>
               <form class="personalComposer" id="personalComposer">
                 <textarea id="personalDraft" rows="2" placeholder="Share a thought, a conversation, or something to remember…" aria-label="Message"></textarea>
+                <div class="personalVoiceControls"><button id="personalMic" type="button" aria-label="录音转文字">录音</button><button id="personalVoiceCancel" type="button" hidden>取消</button><button id="personalVoiceRetry" type="button" hidden>重试转写</button><span id="personalVoiceStatus" role="status" aria-live="polite"></span></div>
                 <div class="personalComposerBottom"><span>↵ TO SEND <i>·</i> SHIFT + ↵ FOR A NEW LINE</span><button id="personalSend" type="submit">Send <b>↗</b></button></div>
               </form>
               <p class="personalPrivacy"><span>◇</span> Your conversations stay private and traceable to their source.</p>
@@ -505,6 +507,7 @@
     <script src="src/js/api.js"></script>
     <script src="src/js/app.js"></script>
     <script src="src/js/personal-os.js"></script>
+    <script src="src/js/voice.js"></script>
     <script src="src/js/tasks.js"></script><script src="src/js/people.js"></script>
   </body>
 </html>

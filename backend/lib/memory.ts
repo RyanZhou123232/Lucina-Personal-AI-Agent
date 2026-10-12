@@ -1,10 +1,15 @@
 export type MemoryPlan = {
   intent: "lookup" | "conversation";
+  needsMemory?: boolean;
+  allowProposals?: boolean;
   terms: string[];
   personName: string | null;
   entityTypes: string[];
   taskStatus: "pending" | "completed" | null;
 };
+export function allowsProposals(plan: MemoryPlan): boolean {
+  return plan.allowProposals ?? plan.intent === "conversation";
+}
 export type MemoryEvidence = {
   citationId: string;
   entityType: string;
@@ -45,17 +50,19 @@ const entityTypes = new Set(["people", "interactions", "tasks", "events", "obser
 export function parseMemoryPlan(value: unknown): MemoryPlan {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid memory query plan.");
   const plan = value as Record<string, unknown>;
-  if (!["lookup", "conversation"].includes(String(plan.intent))) throw new Error("Invalid memory query intent.");
+  if (typeof plan.needs_memory !== "boolean" || typeof plan.allow_proposals !== "boolean") throw new Error("Request plan must independently specify needs_memory and allow_proposals.");
+  if (plan.intent !== undefined && !["lookup", "conversation"].includes(String(plan.intent))) throw new Error("Invalid memory query intent.");
   if (!Array.isArray(plan.terms) || plan.terms.length > 32 || plan.terms.some(term => typeof term !== "string" || term.length > 100)) throw new Error("Invalid memory search terms.");
   if (!Array.isArray(plan.entity_types) || plan.entity_types.some(type => typeof type !== "string" || !entityTypes.has(type))) throw new Error("Invalid memory entity filter.");
   if (plan.person_name !== null && (typeof plan.person_name !== "string" || !plan.person_name.trim() || plan.person_name.length > 500)) throw new Error("Invalid memory person filter.");
   if (plan.task_status !== null && plan.task_status !== "pending" && plan.task_status !== "completed") throw new Error("Invalid memory task filter.");
-  return { intent: plan.intent as MemoryPlan["intent"], terms: [...new Set((plan.terms as string[]).map(term => term.trim()).filter(Boolean))].slice(0,8), personName: plan.person_name as string | null, entityTypes: [...new Set(plan.entity_types as string[])], taskStatus: plan.task_status as MemoryPlan["taskStatus"] };
+  return { intent: plan.allow_proposals ? "conversation" : "lookup", needsMemory: plan.needs_memory, allowProposals: plan.allow_proposals, terms: [...new Set((plan.terms as string[]).map(term => term.trim()).filter(Boolean))].slice(0,8), personName: plan.person_name as string | null, entityTypes: [...new Set(plan.entity_types as string[])], taskStatus: plan.task_status as MemoryPlan["taskStatus"] };
 }
 type RpcClient = { rpc: (name: string, args: Record<string, unknown>) => PromiseLike<{ data: unknown; error: { message: string } | null }> };
 export async function retrieveMemory(client: RpcClient, plan: MemoryPlan, excludeMessageId: string): Promise<MemoryContext> {
+  if (plan.needsMemory === false) return { plan, evidence: [] };
   const { data, error } = await client.rpc("search_personal_memory", {
-    p_terms: plan.terms, p_person_name: plan.personName, p_entity_types: plan.intent === "lookup" && plan.entityTypes.length ? [...new Set([...plan.entityTypes,"messages"])] : plan.entityTypes,
+    p_terms: plan.terms, p_person_name: plan.personName, p_entity_types: plan.entityTypes.length ? [...new Set([...plan.entityTypes,"messages"])] : plan.entityTypes,
     p_task_status: plan.taskStatus, p_exclude_message_id: excludeMessageId, p_limit: 12,
   });
   if (error) {

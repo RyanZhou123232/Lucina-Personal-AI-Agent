@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { parseMemoryPlan, retrieveMemory, validateMemoryAnswer, validateCitationSupport, scopeMemoryForLookup } from '../lib/memory.ts';
-const value = {intent:'lookup',terms:['Alex'],person_name:'Alex',entity_types:['tasks'],task_status:null};
+const value = {intent:'lookup',needs_memory:true,allow_proposals:false,terms:['Alex'],person_name:'Alex',entity_types:['tasks'],task_status:null};
 const plan = parseMemoryPlan(value);
 const row = {entity_type:'tasks',entity_id:'task-1',record:{title:'Send deck',status:'pending'},sources:[{id:'source-1',content:'I promised Alex a deck',conversation_id:'c',created_at:'2026-10-10'}],score:10};
 test('query plan allowlists filters and bounds input', () => {
@@ -72,4 +72,17 @@ test('raw source UUIDs and malformed memory labels cannot pass as inline citatio
  for(const label of ['1d7b5659-fc40-4577-8ab2-99ded60cc4a5','M99','M1 M9']) {
   assert.throws(()=>validateMemoryAnswer({reply:'Claim ['+label+']',evidence_tier:'EXACT',citations:['M1']},memory),/unverified/);
  }
+});
+
+test('retrieval and proposal permissions are independent and malformed flags fail closed',()=>{
+  for(const needs_memory of [false,true])for(const allow_proposals of [false,true]){
+    const parsed=parseMemoryPlan({...value,needs_memory,allow_proposals});
+    assert.equal(parsed.needsMemory,needs_memory);assert.equal(parsed.allowProposals,allow_proposals);
+  }
+  for(const bad of [{...value,needs_memory:undefined},{...value,allow_proposals:undefined},{...value,allow_proposals:'true'}])assert.throws(()=>parseMemoryPlan(bad),/independently/);
+});
+test('fully specified new action does not search unrelated private history',async()=>{
+  const actionPlan=parseMemoryPlan({...value,needs_memory:false,allow_proposals:true,terms:[],person_name:null,entity_types:[]});
+  const context=await retrieveMemory({rpc:()=>{throw new Error('Unexpected history search')}},actionPlan,'latest');
+  assert.deepEqual(context.evidence,[]);assert.equal(context.plan.allowProposals,true);
 });

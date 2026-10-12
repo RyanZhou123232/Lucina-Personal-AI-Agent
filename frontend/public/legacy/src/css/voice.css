@@ -1,0 +1,6 @@
+.personalVoiceControls { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:10px 0 16px; }
+.personalVoiceControls button { border:1px solid rgba(240,235,225,.35); border-radius:999px; background:rgba(255,255,255,.06); color:inherit; padding:8px 15px; font:inherit; cursor:pointer; }
+.personalVoiceControls button:disabled { opacity:.5; cursor:wait; }
+.personalVoiceControls button[hidden] { display:none; }
+.personalVoiceControls button:focus-visible { outline:2px solid #ebe5d9; outline-offset:3px; }
+#personalVoiceStatus { font-size:13px; opacity:.85; }

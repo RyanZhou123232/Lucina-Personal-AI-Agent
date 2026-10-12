@@ -7,6 +7,8 @@
 - `guides/`：[Memory v6](guides/MEMORY_V6.md)、[Google 集成配置](guides/GOOGLE_INTEGRATIONS.md)。新增专项指南放这里。
 - `reference/`：原始需求附件 `ORIGINAL_REQUEST.docx`，只保留一份。
 
+- [本地语音转写配置与验收](guides/STT.md)：百炼录完转写、编辑确认后发送；当前本地实现与验收边界。
+
 ## 文件边界：遇到问题该听哪份
 
 用户最新明确要求优先于项目文档。文档按职责判断，不把所有文件排成一个通用优先级：

@@ -105,7 +105,7 @@ test('unsafe suggestions are filtered: assistant evidence, unsupported type, inv
 
 const memory = { plan: {intent:'lookup',terms:['Alex'],personName:'Alex',entityTypes:['tasks'],taskStatus:null}, evidence: [{citationId:'M1',entityType:'tasks',entityId:'task-1',record:{title:'Send deck',status:'pending'},sources:[{id:'source-1',content:'I promised Alex a deck'}],score:10}] };
 test('planner returns validated original-language search constraints', async () => {
-  await withResponses([completion(JSON.stringify({intent:'lookup',terms:['Alex','介绍资料'],person_name:'Alex',entity_types:['tasks','messages'],task_status:null}))],async calls=>{
+  await withResponses([completion(JSON.stringify({needs_memory:true,allow_proposals:false,terms:['Alex','介绍资料'],person_name:'Alex',entity_types:['tasks','messages'],task_status:null}))],async calls=>{
     const plan=await createMemoryPlan([{role:'user',content:'我答应给 Alex 什么？'}]);
     assert.deepEqual(plan.terms,['Alex','介绍资料']); assert.equal(plan.personName,'Alex');
     assert.match(calls[0].messages[0].content,/not proof/);
@@ -373,7 +373,7 @@ test('second capture rejection stops without publishing the unsafe proposal',asy
 });
 
 test('invalid search plan gets one repair with actual validation feedback',async()=>{
- const bad={intent:'conversation',terms:[58],person_name:null,entity_types:[],task_status:null};
+ const bad={needs_memory:false,allow_proposals:true,terms:[58],person_name:null,entity_types:[],task_status:null};
  const fixed={...bad,terms:['58','Maple']};
  await withResponses([completion(JSON.stringify(bad)),completion(JSON.stringify(fixed))],async calls=>{
   const result=await createMemoryPlan([{role:'user',content:'58 currently interns at Maple'}]);
@@ -426,4 +426,55 @@ test('a binding warning is fed into one bounded repair rather than silently losi
   assert.equal(result.reply,revised.reply);assert.equal(calls.length,3);
   assert.ok(calls[1].messages.some(m=>m.content.includes(turn.warning)));
  });
+});
+
+const emailRequest='请帮我准备一封邮件草稿，收件人 test@example.com，主题：测试邮件，正文：123456。先保存到 Gmail 草稿，等我在 Review 批准后再发送。';
+const emailMessages=[{id:'email-request',role:'user',content:emailRequest}];
+const emailProposal={change_type:'draft_email',confidence:0.95,payload:{to_email:'test@example.com',cc:[],bcc:[],subject:'测试邮件',body:'123456'},sources:[{message_id:'email-request',quote:emailRequest}]};
+test('new email planning separates action permission from history and approval is not a pending-task filter',async()=>{
+  const output={needs_memory:false,allow_proposals:true,terms:[],person_name:null,entity_types:[],task_status:null};
+  await withResponses([completion(JSON.stringify(output))],async calls=>{
+    const plan=await createMemoryPlan(emailMessages);
+    assert.equal(plan.needsMemory,false);assert.equal(plan.allowProposals,true);assert.equal(plan.taskStatus,null);
+    assert.match(calls[0].messages[0].content,/waiting for email approval is not a task-status filter/);
+  });
+});
+test('new email with empty memory generates a source-linked Review proposal instead of a history refusal',async()=>{
+  const context={plan:{...memory.plan,intent:'lookup',needsMemory:false,allowProposals:true},evidence:[]};
+  const result={reply:'请在 Review 检查邮件提案。',proposals:[emailProposal],evidence_tier:'NONE',citations:[]};
+  await withResponses([completion(JSON.stringify(result)),completion(JSON.stringify({reply_supported:true,reason:'New requested email; not sent.',citation_support:[],proposals:[{index:0,supported:true,reason:'Recipient and body explicitly requested'}]}))],async()=>{
+    const turn=await createAgentTurn(emailMessages,context);
+    const checked=await verifyAgentTurn(turn,emailMessages,context);
+    assert.equal(checked.proposals.length,1);assert.equal(checked.proposals[0].changeType,'draft_email');
+    assert.deepEqual(checked.proposals[0].sourceQuotes.map(s=>s.messageId),['email-request']);assert.equal(checked.grounding.tier,'NONE');
+  });
+});
+test('mixed history lookup and requested email preserve grounded evidence and the action together',async()=>{
+  const text='查一下我答应给 Alex 什么，并给 test@example.com 写封邮件说我会发送资料。';
+  const chat=[{id:'mixed-request',role:'user',content:text}];
+  const context={...memory,plan:{...memory.plan,intent:'lookup',needsMemory:true,allowProposals:true}};
+  const proposal={...emailProposal,sources:[{message_id:'mixed-request',quote:text}]};
+  const result={reply:'你答应给 Alex 资料 [M1]。邮件提案请在 Review 检查。',proposals:[proposal],evidence_tier:'EXACT',citations:['M1']};
+  await withResponses([completion(JSON.stringify(result))],async()=>{
+    const turn=await createAgentTurn(chat,context);assert.equal(turn.proposals.length,1);assert.deepEqual(turn.grounding.citations,['M1']);
+  });
+});
+test('pure past-email question remains read-only even if a model proposes a new draft',async()=>{
+  const context={...memory,plan:{...memory.plan,intent:'conversation',needsMemory:true,allowProposals:false}};
+  await withResponses([completion(JSON.stringify({reply:'Found historical context [M1]',proposals:[emailProposal],evidence_tier:'RELATED',citations:['M1']}))],async()=>{
+    assert.deepEqual((await createAgentTurn([{role:'user',content:'我之前发过什么邮件？'}],context)).proposals,[]);
+  });
+});
+test('missing email recipient can ask a clarification even without historical evidence',async()=>{
+  const context={plan:{...memory.plan,needsMemory:false,allowProposals:true},evidence:[]};
+  const response={reply:'请提供收件人邮箱。',proposals:[],evidence_tier:'NONE',citations:[]};
+  await withResponses([completion(JSON.stringify(response))],async()=>{
+    const turn=await createAgentTurn([{role:'user',content:'帮我写一封感谢邮件'}],context);
+    assert.equal(turn.reply,response.reply);assert.deepEqual(turn.proposals,[]);
+  });
+});
+test('ordinary advice without memory is not forced into a historical no-evidence refusal',async()=>{
+  const context={plan:{...memory.plan,needsMemory:false,allowProposals:false},evidence:[]};
+  const response={reply:'Keep the email brief and specific.',proposals:[],evidence_tier:'NONE',citations:[]};
+  await withResponses([completion(JSON.stringify(response))],async()=>assert.equal((await createAgentTurn([{role:'user',content:'How should I write a thank-you email?'}],context)).reply,response.reply));
 });

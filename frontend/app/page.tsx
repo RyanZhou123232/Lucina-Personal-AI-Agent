@@ -23,7 +23,7 @@ export default function Home() {
       title="Personal OS"
       src="/legacy/index.html"
       className="legacyAppFrame"
-      allow="clipboard-read; clipboard-write"
+      allow="clipboard-read; clipboard-write; microphone"
     />
   );
 }
