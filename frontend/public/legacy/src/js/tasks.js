@@ -91,6 +91,7 @@
     const showCompleted = completedToggle.checked;
     const visible = tasks.filter(task => (task.status === "completed") === showCompleted);
     count.textContent = String(tasks.filter(task => task.status !== "completed").length);
+    window.dispatchEvent(new CustomEvent("personal-os:tasks-loaded", { detail: tasks }));
     if (!visible.length) {
       const empty = document.createElement("p");
       empty.className = "personalEmptyReview";
@@ -101,6 +102,7 @@
     visible.forEach(task => {
       const card = document.createElement("article");
       card.className = "personalTaskCard";
+      card.dataset.itemId = task.id;
       const details = document.createElement("div");
       const heading = document.createElement("h3");
       heading.textContent = task.title;
@@ -139,6 +141,7 @@
       card.append(details, actions);
       list.append(card);
     });
+    window.dispatchEvent(new CustomEvent("personal-os:task-cards-ready"));
   };
   const load = async () => {
     if (!active || busy || editingId) return;

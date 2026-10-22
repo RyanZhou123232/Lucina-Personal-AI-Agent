@@ -1,7 +1,7 @@
 # Personal OS — Evaluation Specification
 
 > 文档边界：质量指标与验收方法；运行结果是证据，当前进度看 PROJECT_HANDOFF，不以少量测试替代正式验收。 完整职责说明见 [文档入口](../README.md#文件边界遇到问题该听哪份)。
-Version: v0.1  
+Version: v0.2  
 Scope: MVP1
 
 ## 1. Purpose
@@ -227,3 +227,17 @@ The full T10 diagnostic confirms a physical `attributes.likes` overwrite and an 
 
 After 009/010 are confirmed applied, run all ten cases with isolated fictional data and fixed model settings. Measure adequate grounded answers, wrong attribution, duplicate proposals, unnecessary recap, unsupported negative assertions and false refusals. Check that generated, bound, withheld, reviewed and committed states are distinguished. A pending proposal or an accepted mock verdict is not proof of a correct stored fact.
 
+## 16. Agent + Canvas Experience Acceptance
+
+产品原则与范围以 [PRD 第 2 节及第 16 节](PRD.md) 为准。本节定义 MVP1 体验验收方法，不代表已通过。
+
+在桌面浏览器执行以下场景，分别记录实际行为、通过/失败、截图或录屏及用户反馈；全部通过才满足该体验指标。不要用视觉截图代替真实交互和后端结果核对。
+
+1. 用无未完成事项的账号进入工作区：只呈现背景和底部 Agent 沟通入口，无常驻标题、邮箱、连接按钮、固定功能面板或空卡片；按需入口仍可打开账户与连接管理。
+2. 录制一段 2–5 分钟、中英混合的交流复述，中间夹带“等会给他写封邮件”的意图，然后继续叙述：录音不中断、不强制打开表单；转写可编辑后提交；处理后能在未完成事项中找到该动作。此项不要求实时识别或实时转录，识别质量另按提取指标评估。
+3. 跟随同一封邮件从准备到待审批：事项保持连续，不需要在多个栏目之间寻找；草稿能编辑，明确批准前不发送，批准后的结果与真实 provider 回执一致。等待审批仍计为未完成。
+4. 执行一个日程请求：相关工作界面按需出现，可补充信息并审批；未批准不创建，实际创建结果符合第 6 节标准。
+5. 分别验证等待用户决定、明确执行失败、结果不确定及已确认成功：前三种仍可找回和处理该事项，结果不确定时不引导盲目重试；仅确认办结后相关工作界面退场。重新进入工作区，未完成事项仍可找回。
+6. 在沟通时查看对话记录，并按需打开来源及后端诊断：能检查 Agent 理解和真实状态；结束查看后可恢复安静画布，关闭视图不会删除事项或来源。
+
+真实邮件发送与日程创建仍需用户明确审批；失败/不确定场景可使用受控测试，不能为体验验收盲目执行外部动作。本轮仅新增验收合同，尚无体验验收结果；长期动效、边说边识别和原生 Gmail 接入不计入本节通过门槛。

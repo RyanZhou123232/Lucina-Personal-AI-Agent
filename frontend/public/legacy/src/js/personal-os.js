@@ -131,7 +131,8 @@
     form.dataset.composerBusy = String(value || switchingConversation);
     sendButton.disabled = value || switchingConversation || voiceBusy() || !draft.value.trim();
     newConversationButton.disabled = value || switchingConversation || voiceBusy();
-    sendButton.textContent = value ? "Saving…" : "Send ↗";
+    sendButton.textContent = value ? "···" : "↑";
+    sendButton.setAttribute("aria-label", value ? "Agent is responding" : "Send message");
   };
 
   const makeReviewEditor = (change, onSaved, onCancel) => {
@@ -234,6 +235,7 @@
       if (editingReviewId) return;
       const changes = result.changes || [];
       reviewCount.textContent = String(changes.length);
+      window.dispatchEvent(new CustomEvent("personal-os:reviews-loaded", { detail: changes }));
       reviewList.replaceChildren();
       if (!changes.length) {
         const empty = document.createElement("p");
@@ -245,9 +247,10 @@
       changes.forEach((change) => {
         const card = document.createElement("article");
         card.className = "personalReviewCard";
+        card.dataset.itemId = change.id;
         const type = document.createElement("p");
         type.className = "personalKicker";
-        type.textContent = change.change_type.replaceAll("_", " ");
+        type.textContent = ({draft_email:"Email",create_calendar_event:"Calendar",create_person:"Person",update_person:"Person",create_task:"Task",create_observation:"Observation",create_insight:"Insight"})[change.change_type] || "Review";
         const payload = document.createElement("pre");
         const external=["draft_email","create_calendar_event"].includes(change.change_type);
         if(external){
@@ -333,8 +336,10 @@
         card.append(type, payload, actions);
         reviewList.append(card);
       });
+      window.dispatchEvent(new CustomEvent("personal-os:review-cards-ready"));
     } catch (error) {
       reviewList.textContent = error.message || "Review queue is unavailable.";
+      showNotice(error.message || "Could not load unfinished items.", true);
     }
   };
 
@@ -411,6 +416,7 @@
     event.preventDefault();
     const content = draft.value.trim();
     if (!content || saving || switchingConversation || voiceBusy()) return;
+    window.dispatchEvent(new CustomEvent("personal-os:conversation-visible"));
     setLoading(true);
     showNotice("");
     try {
@@ -424,7 +430,8 @@
       draft.value = "";
       status.textContent = "CONNECTED · SAVING ON";
       if (result.pendingChanges?.length) await loadReviews();
-      showNotice(result.warning || (result.pendingChanges?.length ? `Agent replied. ${result.pendingChanges.length} item(s) are waiting for your review.` : "Agent replied and saved this conversation."), Boolean(result.warning));
+      showNotice(result.warning || "", Boolean(result.warning));
+      draft.dispatchEvent(new Event("input", { bubbles: true }));
       messagesElement.scrollTop = messagesElement.scrollHeight;
     } catch (error) {
       showNotice(error.message || "Could not save your message.", true);
@@ -448,8 +455,7 @@
         item.classList.toggle("isActive", item === tab);
         item.setAttribute("aria-selected", String(item === tab));
       });
-      contextPanel.hidden = review;
-      reviewPanel.hidden = !review;
+      if (!review) contextPanel.hidden = false;
       if (review) void loadReviews();
     });
   });

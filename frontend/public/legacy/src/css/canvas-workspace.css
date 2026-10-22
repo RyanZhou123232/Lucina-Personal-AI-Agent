@@ -1,0 +1,84 @@
+/* Full-screen quiet canvas; existing background and real record controls retained. */
+.personalWorkspace { inset: 0; gap: 0; pointer-events: none; }
+.stage.isAppReady .personalWorkspace { pointer-events: none; }
+.personalWorkspace button { cursor: pointer; }
+.personalWorkspace button:disabled { cursor: default; }
+.personalWorkspace button:focus-visible, .personalWorkspace textarea:focus-visible { outline: 2px solid #eed8c4; outline-offset: 4px; }
+.personalDock { position: absolute; bottom: max(34px, env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(760px, calc(100% - 64px)); pointer-events: auto; z-index: 4; }
+.personalComposer { display: flex; align-items: flex-end; gap: 12px; padding: 10px 12px; border-radius: 32px; background: rgba(38,26,22,.35); border: 1px solid rgba(255,239,219,.24); box-shadow: 0 12px 40px rgba(25,17,14,.10), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter: blur(24px); }
+.personalComposer:focus-within { border-color: rgba(255,239,219,.5); }
+.personalComposer textarea { flex: 1; width: auto; min-width: 0; min-height: 24px; max-height: 150px; height: 24px; resize: none; margin: 8px 0; font-size: 16px; line-height: 24px; scrollbar-width: thin; }
+.personalComposer textarea::placeholder { color: rgba(255,241,225,.52); }
+.personalComposer .canvasIcon, .personalComposer .canvasSend { flex-shrink: 0; min-width: 40px; height: 40px; padding: 0 10px; border: 0; border-radius: 50%; background: transparent; color: rgba(255,244,232,.82); font-size: 18px; }
+.personalComposer #personalMic { font-size: 12px; border-radius: 20px; }
+.personalComposer #personalMic.isRecording { background: rgba(214,151,124,.28); }
+.personalComposer .canvasIcon:hover { background: rgba(255,255,255,.09); }
+.personalComposer .canvasSend { color: #513a2b; background: #eee2d2; font-size: 23px; }
+.personalComposer .canvasSend:disabled { color: rgba(255,244,232,.30); background: rgba(255,244,232,.07); }
+.personalDock .personalNotice { width: fit-content; max-width: 100%; margin: 0 auto 12px; min-height: 0; padding: 9px 14px; border-radius: 16px; backdrop-filter: blur(18px); font-size: 12px; }
+.personalDock .personalVoiceControls { justify-content: center; margin: 0 0 10px; }
+.personalVoiceControls:has(#personalVoiceStatus:empty):not(:has(button:not([hidden]))) { display: none; }
+.personalTranscript { position: absolute; top: 12vh; bottom: 190px; left: 50%; transform: translateX(-50%); width: min(740px, calc(100% - 80px)); pointer-events: auto; }
+.personalTranscript .canvasClose { position: absolute; right: -36px; top: 0; }
+.personalMessages { height: 100%; min-height: 0; padding: 12px 12px 35px; mask-image: linear-gradient(transparent, #000 20px, #000 calc(100% - 22px), transparent); }
+.personalMessage { max-width: 94%; gap: 0; }
+.personalAvatar, .personalMessageMeta { display: none; }
+.personalMessageBody p { font-size: 16px; line-height: 1.75; color: rgba(255,241,227,.90); }
+.userMessage .personalMessageBody { border: 0; background: rgba(255,245,230,.07); padding: 12px 18px; border-radius: 20px; }
+.personalMessage.userMessage { max-width: 82%; }
+.personalPendingShelf { margin: 0 0 16px; }
+#personalPendingItems { display: flex; justify-content: center; gap: 9px; overflow-x: auto; padding: 5px; scrollbar-width: thin; }
+.canvasPendingItem { flex-shrink: 0; display: flex; align-items: center; gap: 9px; max-width: 240px; border: 1px solid rgba(255,240,221,.22); border-radius: 24px; padding: 10px 15px; background: rgba(45,29,22,.36); color: #f1e3d4; backdrop-filter: blur(18px); font: 12px/1.4 Arial, sans-serif; }
+.canvasPendingItem span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.canvasPendingItem .itemDot { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: #ddb69a; }
+.canvasPendingItem.isSelected { background: rgba(239,218,194,.19); border-color: rgba(255,239,219,.62); }
+.canvasPendingItem.isAttention .itemDot { background: #edb3a2; }
+.personalFocus { position: absolute; left: 50%; top: 7vh; bottom: 200px; transform: translateX(-50%); width: min(700px, calc(100% - 64px)); display: flex; flex-direction: column; pointer-events: auto; padding: 22px 26px; border-radius: 26px; z-index: 3; background: rgba(45,28,23,.67); }
+.canvasSurfaceTop { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-shrink: 0; color: rgba(255,239,219,.8); font-size: 14px; }
+.canvasClose { width: 32px; height: 32px; padding: 0; flex-shrink: 0; border: 0; border-radius: 50%; color: rgba(255,240,223,.65); background: transparent; font-size: 23px; }
+.canvasClose:hover { color: #fff4e7; background: rgba(255,255,255,.08); }
+.personalFocus .personalCanvasContent { min-height: 0; padding: 15px 0 5px; scrollbar-width: thin; scrollbar-color: #a58d7e transparent; }
+.personalReviewCard { padding: 0; margin: 0; border: 0; background: transparent; }
+.personalReviewCard .personalKicker { font: 12px Arial, sans-serif; letter-spacing: 0; color: #ead1b9; text-transform: none; margin: 20px 0 12px; }
+.personalReviewCard pre { max-height: none; padding: 20px; font: 15px/1.8 Arial, sans-serif; color: #f2e5d6; border: 1px solid rgba(255,235,212,.1); background: rgba(255,242,222,.045); border-radius: 16px; }
+.personalReviewActions { margin-top: 18px; gap: 10px; }
+.personalReviewActions button { padding: 10px 16px; font-size: 12px; }
+.personalEditHint, .personalReviewError { font-size: 12px; line-height: 1.6; }
+.personalDrawer { position: absolute; bottom: 115px; left: max(24px, calc(50% - 380px)); width: min(380px, calc(100% - 48px)); max-height: calc(100dvh - 160px); display: flex; flex-direction: column; overflow: auto; padding: 20px; pointer-events: auto; z-index: 5; border-radius: 22px; background: rgba(40,27,23,.82); scrollbar-width: thin; }
+.canvasMenu { display: grid; gap: 4px; margin: 12px 0; }
+.canvasMenu button { text-align: left; border: 0; border-radius: 10px; background: transparent; color: #eddfcf; padding: 11px 10px; font: 13px Arial, sans-serif; }
+.canvasMenu button:hover { background: rgba(255,255,255,.07); }
+.canvasMenu #personalNewConversation { border: 0; border-radius: 10px; padding: 11px 10px; background: transparent; }
+.canvasMenu b { font-size: 11px; font-weight: normal; opacity: .65; margin-left: 7px; }
+.canvasSettings { padding: 13px 0; border-top: 1px solid rgba(255,255,255,.1); font-size: 12px; color: rgba(255,238,220,.66); }
+.canvasSettings summary { cursor: pointer; }
+.canvasSettings p { line-height: 1.6; overflow-wrap: anywhere; }
+.canvasSettings button { margin: 5px 3px 0 0; }
+.personalDrawer #personalContextPanel { overflow: visible; padding: 12px 0; }
+.personalPeopleSection { border: 0; margin: 0; padding: 0; }
+.personalWorkspace.isWorking .personalTranscript { visibility: hidden; }
+.personalWorkspace [hidden] { display: none !important; }
+@media (max-width: 850px) {
+  .personalWorkspace { inset: 0; overflow: hidden; }
+  .personalDock { width: calc(100% - 32px); bottom: max(20px, env(safe-area-inset-bottom)); }
+  .personalComposer { gap: 5px; padding: 8px; }
+  .personalComposer textarea { font-size: 15px; }
+  .personalTranscript { top: 7vh; bottom: 180px; width: calc(100% - 56px); }
+  .personalTranscript .canvasClose { right: -18px; top: -24px; }
+  .personalFocus { top: 24px; bottom: 190px; width: calc(100% - 32px); padding: 16px; }
+  .personalDrawer { left: 16px; bottom: 100px; width: calc(100% - 32px); }
+  #personalPendingItems { justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { .personalWorkspace * { animation: none !important; scroll-behavior: auto !important; } }
+
+/* Keep the composer clean and review actions reachable without scrolling. */
+.personalComposer textarea { padding: 0; overflow-y: auto; }
+.personalWorkspace .personalCanvasContent, .personalMessages, .personalDrawer { touch-action: pan-y; }
+.personalFocus[data-single="true"] .personalReviewContent { overflow: hidden; }
+.personalFocus[data-single="true"] #personalReviewList { height: 100%; }
+.personalFocus[data-single="true"] .personalReviewCard { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.personalFocus[data-single="true"] .personalReviewCard pre { flex: 1; min-height: 0; overflow: auto; margin: 12px 0; scrollbar-width: thin; }
+.personalFocus[data-single="true"] .personalReviewActions { flex: 0 0 auto; margin: 10px 0 0; padding-bottom: 3px; }
+.personalFocus[data-single="true"] .personalReviewEditor { flex: 1; min-height: 0; overflow: auto; padding: 3px; }
+.personalFocus[data-single="true"] .personalKicker { flex: 0 0 auto; margin: 12px 0 0; }
+.personalFocus, .personalTranscript { bottom: var(--dock-clearance, 200px); }

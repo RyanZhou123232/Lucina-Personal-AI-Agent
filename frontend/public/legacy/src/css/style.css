@@ -163,7 +163,8 @@ body {
 
 .introText span {
   display: inline-block;
-  min-width: 0.56em;
+  min-width: 0;
+  flex-shrink: 0;
   opacity: 0;
   filter: blur(14px);
   transform: translateY(7px) scale(1.08);

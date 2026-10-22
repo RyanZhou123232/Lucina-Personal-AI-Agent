@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personal OS</title>
+    <title>Lucina</title>
     <link rel="stylesheet" href="src/css/style.css" />
     <link rel="stylesheet" href="src/css/personal-os.css" />
+    <link rel="stylesheet" href="src/css/canvas-workspace.css" />
   <link rel="stylesheet" href="src/css/voice.css" />
   </head>
   <body>
@@ -14,7 +15,7 @@
 
       <div class="introSplash" aria-hidden="true">
         <div class="introStack">
-          <span class="introText">NETWORK SEQUENCE 01</span>
+          <span class="introText">Preparing Lucina 01.</span>
           <div class="introProgressGroup">
             <div class="introProgress" aria-hidden="true">
               <span class="introProgressLine"></span>
@@ -30,7 +31,7 @@
       <form class="loginPanel" aria-label="Login">
         <p class="authMessage" id="authMessage" hidden></p>
         <span class="authView authSignIn">
-          <span class="loginKicker">Network Access</span>
+          <span class="loginKicker">Lucina</span>
           <span class="loginTitle">Sign in</span>
           <label>
             <span>Email</span>
@@ -79,57 +80,57 @@
 
       <div class="scatterLayer" id="buttonField"></div>
 
-      <section class="personalWorkspace" id="personalWorkspace" aria-label="Personal OS workspace" aria-hidden="true">
-        <header class="personalHeader">
-          <div>
-            <p class="personalKicker">PERSONAL OS · PRIVATE WORKSPACE</p>
-            <h1>What’s on your mind?</h1>
-            <p class="personalSubtitle">Talk naturally. I’ll keep track of what matters.</p>
-          </div>
-          <div class="personalHeaderActions">
-            <span class="personalSession"><i></i> SESSION ACTIVE</span>
-            <span id="personalGoogleStatus" class="personalSession">Google not connected</span><button type="button" id="personalGoogleConnect" class="personalSignOut">Connect Google</button><button type="button" id="personalGoogleDisconnect" class="personalSignOut" hidden>Disconnect Google</button>
-            <button type="button" id="personalSignOut" class="personalSignOut">Sign out</button>
-          </div>
-        </header>
-        <div class="personalWorkArea">
-          <section class="personalConversation glassPanel" aria-label="Conversation">
-            <div class="personalConversationTop"><span>AGENT CONVERSATION</span><div class="personalConversationActions"><span id="personalSaveStatus">CONNECTED</span><button id="personalNewConversation" type="button" disabled aria-label="Start a new conversation">New conversation +</button></div></div>
-            <div class="personalMessages" id="personalMessages" aria-live="polite">
-              <article class="personalMessage assistantMessage"><span class="personalAvatar" aria-hidden="true">◖</span><div class="personalMessageBody"><span class="personalMessageMeta">AGENT <i>NOW</i></span><p>Good afternoon. What would you like me to remember, think through, or take care of?</p></div></article>
-            </div>
-            <div class="personalComposerWrap">
-              <p class="personalNotice" id="personalNotice" role="status" hidden></p>
-              <form class="personalComposer" id="personalComposer">
-                <textarea id="personalDraft" rows="2" placeholder="Share a thought, a conversation, or something to remember…" aria-label="Message"></textarea>
-                <div class="personalVoiceControls"><button id="personalMic" type="button" aria-label="录音转文字">录音</button><button id="personalVoiceCancel" type="button" hidden>取消</button><button id="personalVoiceRetry" type="button" hidden>重试转写</button><span id="personalVoiceStatus" role="status" aria-live="polite"></span></div>
-                <div class="personalComposerBottom"><span>↵ TO SEND <i>·</i> SHIFT + ↵ FOR A NEW LINE</span><button id="personalSend" type="submit">Send <b>↗</b></button></div>
-              </form>
-              <p class="personalPrivacy"><span>◇</span> Your conversations stay private and traceable to their source.</p>
-            </div>
+      <section class="personalWorkspace" id="personalWorkspace" aria-label="Agent workspace" aria-hidden="true">
+        <section class="personalTranscript" id="personalTranscript" aria-label="Conversation" hidden>
+          <button type="button" class="canvasClose" id="personalTranscriptClose" aria-label="Hide conversation">×</button>
+          <div class="personalMessages" id="personalMessages" aria-live="polite"></div>
+        </section>
+        <section class="personalFocus glassPanel" id="personalFocus" aria-label="Current item" hidden>
+          <div class="canvasSurfaceTop"><span id="personalFocusTitle"></span><button type="button" class="canvasClose" id="personalFocusClose" aria-label="Close item">×</button></div>
+          <section id="personalReviewPanel" class="personalCanvasContent personalReviewContent" hidden><div id="personalReviewList"></div></section>
+          <section id="personalTaskSection" class="personalCanvasContent personalTaskContent" hidden>
+            <div class="personalTaskToolbar"><span>Open <b id="personalTaskCount">0</b></span><button type="button" id="personalTaskRefresh">Refresh</button></div>
+            <label class="personalCompletedToggle"><input type="checkbox" id="personalTaskCompleted" /> Show completed tasks</label>
+            <p id="personalTaskNotice" class="personalTaskNotice" role="status" hidden></p>
+            <div id="personalTaskList"></div>
           </section>
-          <aside class="personalCanvas glassPanel" aria-label="Context and review">
-            <div class="personalCanvasTop"><span>CANVAS</span><span class="personalCanvasMore">···</span></div>
-            <div class="personalTabs" role="tablist"><button type="button" class="isActive" data-personal-tab="context" role="tab" aria-selected="true">Context</button><button type="button" data-personal-tab="review" role="tab" aria-selected="false">Review <b id="personalReviewCount">0</b></button></div>
-            <section id="personalContextPanel" class="personalCanvasContent personalTaskContent" role="tabpanel">
-              <details class="personalPeopleSection" open>
-                <summary>People <b id="personalPeopleCount">0</b></summary>
-                <div class="personalTaskToolbar"><input id="personalPeopleSearch" type="search" placeholder="Search name or notes" aria-label="Search people" /><button type="button" id="personalPeopleRefresh">Refresh people</button></div>
-                <p id="personalPeopleNotice" class="personalTaskNotice" role="status" hidden></p>
-                <div id="personalPeopleList"><p class="personalEmptyReview">Loading your people…</p></div>
-              </details>
-              <p class="personalKicker">YOUR TASKS</p>
-              <h2>What needs doing.</h2>
-              <div class="personalTaskToolbar"><span>Open <b id="personalTaskCount">0</b></span><button type="button" id="personalTaskRefresh">Refresh</button></div>
-              <label class="personalCompletedToggle"><input type="checkbox" id="personalTaskCompleted" /> Show completed tasks</label>
-              <p id="personalTaskNotice" class="personalTaskNotice" role="status" hidden></p>
-              <div id="personalTaskList"><p class="personalEmptyReview">Loading your tasks…</p></div>
-            </section>
-            <section id="personalReviewPanel" class="personalCanvasContent personalReviewContent" role="tabpanel" hidden><p class="personalKicker">PENDING CHANGES</p><h2>Review before saving.</h2><div id="personalReviewList"><p class="personalEmptyReview">No changes are waiting for review.</p></div></section>
-            <footer class="personalCanvasFooter"><span><i></i> PRIVATE WORKSPACE</span><span>PERSONAL OS · MVP1</span></footer>
-          </aside>
+        </section>
+        <aside class="personalDrawer glassPanel" id="personalDrawer" aria-label="Workspace options" hidden>
+          <div class="canvasSurfaceTop"><span>Workspace</span><button type="button" class="canvasClose" id="personalDrawerClose" aria-label="Close options">×</button></div>
+          <nav class="canvasMenu" aria-label="Workspace tools">
+            <button id="personalNewConversation" type="button" disabled>New conversation +</button>
+            <button id="personalShowTranscript" type="button">Conversation</button>
+            <button type="button" data-personal-tab="context">People</button>
+            <button type="button" id="personalShowTasks">Tasks</button>
+            <button type="button" data-personal-tab="review">Unfinished items <b id="personalReviewCount">0</b></button>
+          </nav>
+          <section id="personalContextPanel" class="personalCanvasContent personalTaskContent" hidden>
+            <details class="personalPeopleSection" open>
+              <summary>People <b id="personalPeopleCount">0</b></summary>
+              <div class="personalTaskToolbar"><input id="personalPeopleSearch" type="search" placeholder="Search name or notes" aria-label="Search people" /><button type="button" id="personalPeopleRefresh">Refresh people</button></div>
+              <p id="personalPeopleNotice" class="personalTaskNotice" role="status" hidden></p>
+              <div id="personalPeopleList"></div>
+            </details>
+          </section>
+          <details class="canvasSettings"><summary>Account & connections</summary>
+            <p id="personalGoogleStatus"></p>
+            <button type="button" id="personalGoogleConnect" class="personalSignOut">Connect Google</button>
+            <button type="button" id="personalGoogleDisconnect" class="personalSignOut" hidden>Disconnect Google</button>
+            <button type="button" id="personalSignOut" class="personalSignOut">Sign out</button>
+          </details>
+          <details class="canvasSettings"><summary>Diagnostics</summary><p id="personalSaveStatus">CONNECTING</p></details>
+        </aside>
+        <div class="personalDock">
+          <section class="personalPendingShelf" id="personalPendingShelf" aria-label="Unfinished items" hidden><div id="personalPendingItems"></div></section>
+          <p class="personalNotice" id="personalNotice" role="status" hidden></p>
+          <div class="personalVoiceControls"><button id="personalVoiceCancel" type="button" hidden>取消</button><button id="personalVoiceRetry" type="button" hidden>重试转写</button><span id="personalVoiceStatus" role="status" aria-live="polite"></span></div>
+          <form class="personalComposer" id="personalComposer">
+            <button type="button" class="canvasIcon" id="personalMenuToggle" aria-label="Workspace options" aria-expanded="false" aria-controls="personalDrawer">···</button>
+            <textarea id="personalDraft" rows="1" placeholder="Talk to your agent…" aria-label="Message"></textarea>
+            <button id="personalMic" class="canvasIcon" type="button" aria-label="录音转文字">录音</button>
+            <button id="personalSend" class="canvasSend" type="submit" aria-label="Send message" disabled>↑</button>
+          </form>
         </div>
-        <footer class="personalFooter"><span>PERSONAL OS <b>·</b> MVP1</span><span>CONVERSATION FIRST <b>·</b> MEMORY WITH PROVENANCE</span></footer>
       </section>
 
       <div class="sortControl" id="sortControl">
@@ -507,6 +508,7 @@
     <script src="src/js/api.js"></script>
     <script src="src/js/app.js"></script>
     <script src="src/js/personal-os.js"></script>
+    <script src="src/js/canvas-workspace.js"></script>
     <script src="src/js/voice.js"></script>
     <script src="src/js/tasks.js"></script><script src="src/js/people.js"></script>
   </body>

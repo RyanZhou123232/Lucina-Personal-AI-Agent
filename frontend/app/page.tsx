@@ -20,7 +20,7 @@ export default function Home() {
 
   return (
     <iframe
-      title="Personal OS"
+      title="Lucina"
       src="/legacy/index.html"
       className="legacyAppFrame"
       allow="clipboard-read; clipboard-write; microphone"
